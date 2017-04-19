@@ -42,3 +42,45 @@ extension Localizable{
     }
 }
 
+public final class  IBLocalizableSettings{
+    
+    var bundle:Bundle!
+    
+    public static func setLanguage(lang:String)
+    {
+        UserDefaults.standard.set(lang, forKey: "IBLocalizableLang")
+        UserDefaults.standard.synchronize()
+        sharedInstance.reloadLang()
+    }
+    
+    // Can't init is singleton
+    private init() {
+        reloadLang()
+    }
+    
+    public func reloadLang(){
+        var path:String?
+        if let langKey=UserDefaults.standard.string(forKey: "IBLocalizableLang")
+        {
+            path=Bundle.main.path(forResource: langKey, ofType: "lproj")
+        }
+        if(path != nil)
+        {
+            bundle = Bundle(path: path!)!
+        }
+        else
+        {
+            bundle = Bundle.main
+        }
+    }
+    //MARK: Shared Instance
+    
+    static let sharedInstance: IBLocalizableSettings = IBLocalizableSettings()
+    
+    //MARK: Local Variable
+    
+    
+   
+    
+}
+
